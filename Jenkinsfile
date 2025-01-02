@@ -21,7 +21,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Set PATH and install Node.js dependencies
+                // Install Node.js dependencies
                 bat """
                 set PATH=%NODEJS_HOME%;%PATH%
                 npm install
@@ -31,17 +31,17 @@ pipeline {
 
         stage('Lint') {
             steps {
-                // Run linting to ensure code quality
+                // Run linting using npx to ensure the locally installed eslint is used
                 bat """
                 set PATH=%NODEJS_HOME%;%PATH%
-                npm run lint
+                npx eslint .
                 """
             }
         }
 
         stage('Build') {
             steps {
-                // Build the application (e.g., React or Node.js backend)
+                // Build the application
                 bat """
                 set PATH=%NODEJS_HOME%;%PATH%
                 npm run build
@@ -51,7 +51,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                // Ensure sonar-scanner is in the PATH and perform SonarQube analysis
+                // Run SonarQube analysis
                 bat """
                 set PATH=%SONAR_SCANNER_PATH%;%PATH%
                 where sonar-scanner || echo "SonarQube scanner not found. Please install it."
