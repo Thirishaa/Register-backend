@@ -29,15 +29,15 @@ pipeline {
             }
         }
 
-        stage('Lint') {
-            steps {
-                // Run linting using npx to ensure the locally installed eslint is used
-                bat """
-                set PATH=%NODEJS_HOME%;%PATH%
-                npx eslint .
-                """
-            }
-        }
+       stage('Lint') {
+    steps {
+        bat """
+        set PATH=%NODEJS_HOME%;%PATH%
+        npm run lint
+        """
+    }
+}
+
 
         stage('Build') {
             steps {
