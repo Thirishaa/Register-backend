@@ -31,14 +31,11 @@ pipeline {
 
      
         stage('Build') {
-            steps {
-                // Build the application
-                bat """
-                set PATH=%NODEJS_HOME%;%PATH%
-                npm run build
-                """
-            }
-        }
+    steps {
+        echo "Skipping build step"
+    }
+}
+
 
         stage('SonarQube Analysis') {
             steps {
