@@ -2,70 +2,70 @@ pipeline {
     agent any
 
     tools {
-        nodejs ‘nodejs-20.10.0’  
+        nodejs 'nodejs-20.10.0'
     }
 
     environment {
-        SONAR_SCANNER_PATH = ‘C:\Program Files\sonar-scanner-6.2.1.4610-windows-x64\bin’
+        SONAR_SCANNER_PATH = 'C:\\Program Files\\sonar-scanner-6.2.1.4610-windows-x64\\bin'
     }
 
     stages {
-        stage(‘Checkout Code’) {
+        stage('Checkout Code') {
             steps {
                 checkout scm  
             }
         }
 
-        stage(‘Install Dependencies’) {
+        stage('Install Dependencies') {
             steps {
-                bat ‘’’
+                bat '''
                 npm install
-                ‘’’
+                '''
             }
         }
 
-        stage(‘Lint’) {
+        stage('Lint') {
             steps {
-                bat ‘’’
+                bat '''
                 npm run lint -- --fix
-                ‘’’
+                '''
             }
         }
 
-        stage(‘Build’) {
+        stage('Build') {
             steps {
-                bat ‘’’
+                bat '''
                 npm run build
-                ‘’’
+                '''
             }
         }
 
-        stage(‘SonarQube Analysis’) {
+        stage('SonarQube Analysis') {
             environment {
-                SONAR_TOKEN = credentials(‘sonar-token’)  // Retrieve SonarQube token from Jenkins credentials
+                SONAR_TOKEN = credentials('sonar-token') // Retrieve SonarQube token from Jenkins credentials
             }
             steps {
-                bat ‘’’
+                bat '''
                 set PATH=%SONAR_SCANNER_PATH%;%PATH%
-                where sonar-scanner || echo “SonarQube scanner not found. Please install it.”
-                Sonar-scanner -Dsonar.projectKey=registerbackend ^ 
-                              -Dsonar.sources=. ^ 
-                              -Dsonar.host.url=http://localhost:9000 ^ 
+                where sonar-scanner || echo "SonarQube scanner not found. Please install it."
+                sonar-scanner -Dsonar.projectKey=registerbackend ^
+                              -Dsonar.sources=. ^
+                              -Dsonar.host.url=http://localhost:9000 ^
                               -Dsonar.token=%SONAR_TOKEN%
-                ‘’’
+                '''
             }
         }
     }
 
     post {
         success {
-            echo ‘Pipeline completed successfully’
+            echo 'Pipeline completed successfully'
         }
         failure {
-            echo ‘Pipeline failed’
+            echo 'Pipeline failed'
         }
         always {
-            echo ‘This runs regardless of the result.’
+            echo 'This runs regardless of the result.'
         }
     }
 }
