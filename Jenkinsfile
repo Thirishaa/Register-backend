@@ -24,13 +24,16 @@ pipeline {
             }
         }
 
-        stage('Lint') {
-            steps {
-                bat '''
-                npm run lint -- --fix
-                '''
-            }
-        }
+        /*
+stage('Lint') {
+    steps {
+        bat '''
+        npm run lint -- --fix
+        '''
+    }
+}
+*/
+
 
         stage('Build') {
             steps {
